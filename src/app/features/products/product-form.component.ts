@@ -78,8 +78,7 @@ export class ProductFormComponent {
       if (!this.editMode) {
         this.idMessage.set('Verificando...');
         this.idChanges.next(value);
-        // temporalmente no bloqueamos el botón mientras se verifica
-        // idValid se actualizará cuando llegue la respuesta
+
       } else {
         this.idValid.set(true);
         this.idMessage.set('');
@@ -136,6 +135,16 @@ export class ProductFormComponent {
     if (!value) {
       this.dateReleaseValid.set(false);
       this.dateReleaseMessage.set('Fecha de lanzamiento es obligatoria.');
+      return;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const releaseDate = new Date(value);
+
+    if (releaseDate < today) {
+      this.dateReleaseValid.set(false);
+      this.dateReleaseMessage.set('La fecha de lanzamiento no puede ser anterior a hoy.');
     } else {
       this.dateReleaseValid.set(true);
       this.dateReleaseMessage.set('');
@@ -146,13 +155,32 @@ export class ProductFormComponent {
     if (!value) {
       this.dateRevisionValid.set(false);
       this.dateRevisionMessage.set('Fecha de revisión es obligatoria.');
+      return;
+    }
+
+    const releaseDate = new Date(this.product.date_release);
+    const revisionDate = new Date(value);
+
+    // calcular la fecha esperada = releaseDate + 1 año
+    const expectedRevision = new Date(releaseDate);
+    expectedRevision.setFullYear(expectedRevision.getFullYear() + 1);
+
+    // normalizar horas para comparar solo fechas
+    expectedRevision.setHours(0, 0, 0, 0);
+    revisionDate.setHours(0, 0, 0, 0);
+
+    if (revisionDate.getTime() !== expectedRevision.getTime()) {
+      this.dateRevisionValid.set(false);
+      this.dateRevisionMessage.set(
+        `La fecha de revisión debe ser exactamente 1 año después de la fecha de lanzamiento (${expectedRevision.toISOString().split('T')[0]}).`
+      );
     } else {
       this.dateRevisionValid.set(true);
       this.dateRevisionMessage.set('');
     }
   }
 
-  /* Validación final antes de emitir */
+  // Validación final antes de emitir
   private allValid(): boolean {
     this.onIdChange(this.product.id);
     this.onNameChange(this.product.name);
@@ -161,6 +189,16 @@ export class ProductFormComponent {
     this.onDateReleaseChange(this.product.date_release);
     this.onDateRevisionChange(this.product.date_revision);
 
+    // Bloquear si todavía está verificando el ID
+    if (this.idChecking()) {
+      this.idMessage.set('Esperando validación del ID...');
+      return false;
+    }
+
+    if (!this.idValid()) {
+      return false;
+    }
+    
     return this.idValid() && this.nameValid() && this.descriptionValid() &&
           this.logoValid() && this.dateReleaseValid() && this.dateRevisionValid();
   }

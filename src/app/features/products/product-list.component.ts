@@ -131,7 +131,15 @@ export class ProductListComponent {
         this.editingProduct.set(null);
         this.refreshList();
       },
-      error: err => alert('Error al guardar: ' + JSON.stringify(err))
+      //error: err => alert('Error al guardar: ' + JSON.stringify(err))
+      error: (err) => {
+      if (err.status === 400 && err.error?.message?.includes('Duplicate')) {
+        alert('El ID del producto ya está registrado. Por favor elige otro.');
+      } else {
+        alert('Ocurrió un error al guardar el producto. Inténtalo más tarde.');
+        console.error('Error al guardar:', err);
+      }
+    }
     });
   }
 }
