@@ -1,0 +1,241 @@
+/* CONTENEDOR PRINCIPAL */
+.container {
+  max-width: 900px; /* ancho máximo */
+  margin: 2rem auto; /* centrado horizontal */
+  padding: 0 1rem;
+}
+
+/* HEADER: BUSCADOR + AGREGAR */
+.header-controls {
+  display: flex;
+  justify-content: space-between; /* buscador a la izquierda, botón a la derecha */
+  align-items: center;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px; /* espacio entre label, input y limpiar */
+}
+
+.add-button-container {
+  margin-top: 0;
+}
+
+.header-controls label {
+  margin: 0;
+}
+
+.header-controls input {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.header-controls button {
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: none;
+  background-color: #0d6efd;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.header-controls button:hover {
+  background-color: #0b5ed7;
+}
+
+/* TITULO */
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* TABLA */
+.table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  margin: auto; /* centrado */
+}
+
+.table {
+  width: 100%;
+  max-width: 850px; /* limitar ancho de tabla */
+  margin: auto;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+
+  th, td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #f1f1f1;
+    vertical-align: top;
+  }
+
+  thead th {
+    text-align: left;
+    font-weight: 600;
+    background: #fafafa;
+  }
+
+  tbody tr:hover {
+    background: #fcfcfc;
+  }
+
+  .logo {
+    border-radius: 6px;
+    display: block;
+  }
+
+  .name {
+    font-weight: 600;
+  }
+
+  .desc {
+    color: #444;
+  }
+}
+
+/* COLUMNA ACCIONES (⋮) */
+.actions-cell,
+.dropdown-cell {
+  position: relative;
+  width: 44px;        /* ancho fijo para los tres puntos */
+  text-align: center; /* centra el botón ⋮ */
+  white-space: nowrap;
+}
+
+.dropdown-btn,
+.dropdown-toggle {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 4px 6px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu,
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  min-width: 120px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  z-index: 20;
+  padding: 4px 0;
+  display: none;
+}
+
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu li,
+.dropdown-content button {
+  list-style: none;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover,
+.dropdown-content button:hover {
+  background: #f5f5f5;
+}
+
+/* PAGINACIÓN */
+.pagination-container,
+.pagination-wrapper {
+  margin-top: 8px;
+  text-align: center;
+
+  button {
+    margin: 0 4px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: none;
+    background-color: #0d6efd;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+  }
+
+  button:hover {
+    background-color: #0b5ed7;
+  }
+
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+/* FOOTER: SELECTOR Y TOTAL REGISTROS */
+.table-footer,
+.bottom-bar {
+  display: flex;
+  justify-content: space-between; /* selector a la izq, total a la der */
+  align-items: center;
+  margin-top: 8px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-size-left,
+.page-size-selector {
+  display: flex;
+  align-items: center;
+
+  label {
+    margin-right: 4px;
+    font-weight: 500;
+    color: #333;
+  }
+
+  select {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+}
+
+.total-right,
+.total-records {
+  font-weight: 500;
+  color: #333;
+  text-align: right;
+}
+
+/* MENSAJES DE CARGA / VACÍO */
+.loading, .empty {
+  margin-top: 1rem;
+  color: #666;
+  text-align: center;
+}

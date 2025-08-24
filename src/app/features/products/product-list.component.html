@@ -1,0 +1,75 @@
+<section class="container">
+  <div class="header-controls">
+    <div class="search-wrapper">
+      <label for="searchId">Buscar por ID:</label>
+      <input id="searchId" type="text" [ngModel]="searchId()" (ngModelChange)="searchId.set($event)" placeholder="ej: uno, dos, tres…" />
+      <button type="button" (click)="searchId.set('')">Limpiar</button>
+    </div>
+    <button type="button" (click)="showNewForm()">Agregar</button>
+  </div>
+
+  <app-product-form 
+      *ngIf="showForm()" 
+      [product]="newProduct()"
+      [editMode]="editingProduct() !== null"
+      (save)="onProductSaved($event)"
+      (cancel)="showForm.set(false)">
+  </app-product-form>
+
+  <h1>Productos bancarios</h1>
+
+  <div class="table-wrapper" *ngIf="paginated() as products; else loading">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Logo</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Fecha lanzamiento</th>
+          <th>Fecha revisión</th>
+          <th>Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of products; trackBy: trackById">
+          <td><code>{{ p.id }}</code></td>
+          <td><img [src]="logoUrl(p.logo)" [alt]="p.name" class="logo" width="32" height="32" loading="lazy" /></td>
+          <td class="name">{{ p.name }}</td>
+          <td class="desc">{{ p.description }}</td>
+          <td>{{ p.date_release | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ p.date_revision | date: 'yyyy-MM-dd' }}</td>
+          <td class="dropdown-cell">
+            <button class="dropdown-btn" (click)="toggleDropdown(p)">⋮</button>
+            <div class="dropdown-content" *ngIf="openDropdown === p">
+              <button type="button" (click)="onEditProduct(p)">Editar</button>
+              <button type="button" (click)="deleteProduct(p)">Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="empty" *ngIf="!products.length">No hay productos para mostrar.</p>
+  </div>
+
+  <div class="pagination-wrapper">
+    <button (click)="page.set(page() - 1)" [disabled]="page() === 1">Anterior</button>
+    <span>Página {{ page() }} de {{ totalPages() }}</span>
+    <button (click)="page.set(page() + 1)" [disabled]="page() === totalPages()">Siguiente</button>
+  </div>
+
+  <div class="bottom-bar">
+    <div>
+      <label for="pageSize">Mostrar:</label>
+      <select id="pageSize" [ngModel]="pageSize()" (ngModelChange)="pageSize.set($event); page.set(1)">
+        <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+      </select>
+    </div>
+    <div>Total registros: {{ filtered().length }}</div>
+  </div>
+
+  <ng-template #loading>
+    <p class="loading">Cargando…</p>
+  </ng-template>
+</section>
